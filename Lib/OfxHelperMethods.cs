@@ -38,7 +38,8 @@ namespace OfxSharpLib
             }
             catch
             {
-                throw new OfxParseException("Unable to parse date");
+                return DateTime.MinValue;
+                //throw new OfxParseException("Unable to parse date");
             }
         }
 
