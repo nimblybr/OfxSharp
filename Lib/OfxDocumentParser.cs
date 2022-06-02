@@ -29,12 +29,12 @@ namespace OfxSharpLib
 
         private OfxDocument ParseOfxDocument(string ofxString)
         {
+            ofxString = RemoveWhiteSpaceInHeader(ofxString);
             //If OFX file in SGML format, convert to XML
             if (!IsXmlVersion(ofxString))
             {
                 ofxString = SgmltoXml(ofxString);
             }
-
             return Parse(ofxString);
         }
 
@@ -96,7 +96,7 @@ namespace OfxSharpLib
             {
                 ofx.Balance = new Balance(ledgerNode, avaliableNode);
             }
-            else
+            else if(ofx.Account.BankId != "336") // If it is c6 bank, it may not have balance information
             {
                 throw new OfxParseException("Balance information not found");
             }
@@ -274,6 +274,22 @@ namespace OfxSharpLib
 
             if (header[7] != "OLDFILEUID:NONE")
                 throw new OfxParseException("OLDFILEUID incorrect");*/
+        }
+
+        private string RemoveWhiteSpaceInHeader(string ofx)
+        {
+            string header = ofx.Substring(0, ofx.IndexOf('<'));
+
+            if (string.IsNullOrWhiteSpace(header))
+                return ofx;
+
+            string[] clearHeader = header.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+            string newHeader = string.Empty;
+
+            foreach (string sentence in clearHeader)
+                newHeader += string.Concat(sentence.Replace(" ", string.Empty), '\n');
+
+            return ofx.Replace(header, newHeader);
         }
 
         #region Nested type: OFXSection
