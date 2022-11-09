@@ -37,5 +37,7 @@ namespace OfxSharpLib
         [Description("Repeating Payment")]
         REPEATPMT,
         OTHER,
+        IN,
+        OUT,
     }
 }
