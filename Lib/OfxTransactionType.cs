@@ -38,6 +38,6 @@ namespace OfxSharpLib
         REPEATPMT,
         OTHER,
         IN,
-        OUT,
+        OUT, 
     }
 }
